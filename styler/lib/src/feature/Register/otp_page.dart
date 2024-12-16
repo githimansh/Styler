@@ -5,8 +5,30 @@ import 'package:styler/src/utlis/Widgets/back_button.dart';
 import 'package:styler/src/utlis/AppColors.dart';
 import 'package:styler/src/feature/Register/opt_popup_screen.dart';
 
-class OTPPageScreen extends StatelessWidget {
+class OTPPageScreen extends StatefulWidget {
   const OTPPageScreen({super.key});
+
+  @override
+  _OTPPageScreenState createState() => _OTPPageScreenState();
+}
+
+class _OTPPageScreenState extends State<OTPPageScreen> {
+  List<TextEditingController> controllers = List.generate(4, (_) => TextEditingController());
+  List<FocusNode> focusNodes = List.generate(4, (_) => FocusNode());
+  bool isOTPComplete = false;
+
+  @override
+  void dispose() {
+    for (var controller in controllers) controller.dispose();
+    for (var focusNode in focusNodes) focusNode.dispose();
+    super.dispose();
+  }
+
+  void _checkOTPCompletion() {
+    setState(() {
+      isOTPComplete = controllers.every((controller) => controller.text.isNotEmpty);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +49,7 @@ class OTPPageScreen extends StatelessWidget {
                 const SizedBox(height: 40),
                 _buildOTPFields(),
                 const SizedBox(height: 40),
-                _buildContinueButton(context),
+                _buildContinueButton(),
               ],
             ),
           ),
@@ -53,8 +75,8 @@ class OTPPageScreen extends StatelessWidget {
           "Add Your OTP Code",
           style: GoogleFonts.gloock(
             fontSize: 32,
-            height: 1.2, 
-            color: AppColors.secondary,
+            height: 1.2,
+            color: AppColors.primary,
           ),
         ),
       ],
@@ -98,7 +120,7 @@ class OTPPageScreen extends StatelessWidget {
       text: TextSpan(
         children: [
           _textSpan("Please enter the ", AppColors.hintColor),
-          _textSpan("OTP sent", AppColors.secondary),
+          _textSpan("OTP sent", AppColors.primary),
           _textSpan(" to your phone number below to verify", AppColors.hintColor),
         ],
       ),
@@ -124,6 +146,8 @@ class OTPPageScreen extends StatelessWidget {
           width: 60,
           height: 60,
           child: TextFormField(
+            controller: controllers[index],
+            focusNode: focusNodes[index],
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -133,23 +157,41 @@ class OTPPageScreen extends StatelessWidget {
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
+              color: AppColors.textColor,
             ),
             keyboardType: TextInputType.number,
+            maxLength: 1,
+            onChanged: (value) {
+              if (value.isNotEmpty && RegExp(r'^[0-9]$').hasMatch(value)) {
+                if (index < focusNodes.length - 1) {
+                  FocusScope.of(context).requestFocus(focusNodes[index + 1]);
+                } else {
+                  focusNodes[index].unfocus();
+                }
+              } else if (value.isEmpty) {
+                controllers[index].clear();
+              } else {
+                controllers[index].clear();
+              }
+              _checkOTPCompletion();
+            },
           ),
         );
       }),
     );
   }
 
-  Widget _buildContinueButton(BuildContext context) {
+  Widget _buildContinueButton() {
     return CustomButton(
       buttonText: 'Continue',
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => OTPPopupScreen()),
-        );
-      },
+      onPressed: isOTPComplete
+          ? () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => OTPPopupScreen()),
+              );
+            }
+          : null,
     );
   }
 }

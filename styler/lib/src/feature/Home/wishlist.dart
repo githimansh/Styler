@@ -166,7 +166,7 @@ class MyWishlistScreen extends ConsumerWidget {
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.w800,
                         fontSize: 12,
-                        color: Color(0xFF5A3F2C),
+                        color: AppColors.primary,
                       ),
                     ),
                   ],
@@ -181,7 +181,7 @@ class MyWishlistScreen extends ConsumerWidget {
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 6),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -190,7 +190,7 @@ class MyWishlistScreen extends ConsumerWidget {
                       style: const TextStyle(
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w700,
-                        fontSize: 20,
+                        fontSize: 18,
                       ),
                     ),
                     IconButton(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:styler/src/common/provider/sortProvider.dart';
+import 'package:styler/src/feature/sort&filters/after_filter.dart';
+import 'package:styler/src/utlis/AppColors.dart';
 
 class FilterModal extends ConsumerWidget {
   const FilterModal({super.key});
@@ -27,7 +29,7 @@ class FilterModal extends ConsumerWidget {
 
   List<Widget> _buildFilterSections(WidgetRef ref) {
     // Define filter sections with their titles, options, and providers
-    final filters = [
+    final List<Map<String, dynamic>> filters = [
       {'title': 'Category', 'options': ['All', 'Dresses', 'Designer'], 'provider': categoryProvider},
       {'title': 'Rating', 'options': ['All', '5 Stars', '4 Stars'], 'provider': ratingProvider},
       {'title': 'Price Range', 'options': ['All', '\$100 - \$300', '\$30 - \$100'], 'provider': priceRangeProvider},
@@ -36,16 +38,18 @@ class FilterModal extends ConsumerWidget {
     ];
 
     return filters.map((filter) {
-      final title = filter['title'] as String;
-      final options = filter['options'] as List<String>;
-      final provider = filter['provider'] as StateProvider<String?>;
+      final String title = filter['title'];
+      final List<String> options = filter['options'];
+      final StateProvider<String?> provider = filter['provider'];
 
       final selectedOption = ref.watch(provider);
       return _buildFilterOption(
         title: title,
         options: options,
         selectedOption: selectedOption,
-        onOptionSelected: (value) => ref.read(provider.notifier).state = value,
+        onOptionSelected: (value) {
+          ref.read(provider.notifier).state = value;
+        },
       );
     }).toList();
   }
@@ -73,15 +77,15 @@ class FilterModal extends ConsumerWidget {
                 option,
                 style: TextStyle(
                   fontSize: 14,
-                  color: isSelected ? Colors.white : Colors.blue,
+                  color: isSelected ? AppColors.background : AppColors.primary,
                 ),
               ),
               selected: isSelected,
               onSelected: (_) => onOptionSelected(option),
-              selectedColor: Colors.blue,
-              backgroundColor: Colors.white,
+              selectedColor: AppColors.primary,
+              backgroundColor: AppColors.background,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              side: const BorderSide(color: Colors.blue, width: 1),
+              side: const BorderSide(color: AppColors.primary, width: 1),
             );
           }).toList(),
         ),
@@ -97,22 +101,34 @@ class FilterModal extends ConsumerWidget {
         ElevatedButton(
           onPressed: () => _resetFilters(ref),
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            side: const BorderSide(color: Colors.blue),
+            backgroundColor: AppColors.background,
+            side: const BorderSide(color: AppColors.primary),
           ),
-          child: const Text('Cancel', style: TextStyle(color: Colors.blue)),
+          child: const Text('Cancel', style: TextStyle(color: AppColors.primary)),
         ),
         ElevatedButton(
-          onPressed: () => Navigator.pop(context),
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-          child: const Text('Apply', style: TextStyle(color: Colors.white)),
+          onPressed: () {
+            Navigator.pop(context); // Close the modal
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AfterFilterScreen()),
+            );
+          },
+          style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
+          child: const Text('Apply', style: TextStyle(color: AppColors.background)),
         ),
       ],
     );
   }
 
   void _resetFilters(WidgetRef ref) {
-    for (final provider in [categoryProvider, ratingProvider, priceRangeProvider, specialtyProvider, servicesProvider]) {
+    for (final provider in [
+      categoryProvider,
+      ratingProvider,
+      priceRangeProvider,
+      specialtyProvider,
+      servicesProvider,
+    ]) {
       ref.read(provider.notifier).state = 'All';
     }
   }

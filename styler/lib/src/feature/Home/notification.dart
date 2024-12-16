@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:styler/src/common/provider/provider.dart';
+import 'package:styler/src/utlis/AppColors.dart';
 
 class NotificationScreen extends ConsumerWidget {
   const NotificationScreen({super.key});
@@ -19,14 +20,14 @@ class NotificationScreen extends ConsumerWidget {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('Notification'),
+        title: const Text('Notification', style: TextStyle(color: AppColors.textColor, fontWeight: FontWeight.bold),),
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications),
             onPressed: () {},
           ),
         ],
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.background,
         elevation: 0,
       ),
       body: ListView(
@@ -40,7 +41,7 @@ class NotificationScreen extends ConsumerWidget {
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
-                  color: Colors.black54,
+                  color: AppColors.textColor,
                 ),
               ),
               const SizedBox(height: 10),
@@ -60,8 +61,9 @@ class NotificationScreen extends ConsumerWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: ListTile(
           leading: CircleAvatar(
-            backgroundColor: Colors.brown[100],
-            child: Icon(notification.icon, color: Colors.brown),
+            backgroundColor: AppColors.iconBackground,
+            
+            child: Icon(notification.icon, color: AppColors.buttonColor),
           ),
           title: Text(
             notification.title,

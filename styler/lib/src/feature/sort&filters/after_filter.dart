@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:styler/src/feature/Designer_Details/about_page.dart';
 import 'package:styler/src/feature/sort&filters/sort.dart';
 import 'package:styler/src/utlis/AppColors.dart';
 import 'package:styler/src/utlis/Widgets/back_button.dart';
 // import 'filter_modal.dart'; // Import the file where your FilterModal widget is defined.
 
-class MostPopularScreen extends StatefulWidget {
-  const MostPopularScreen({super.key});
+class AfterFilterScreen extends StatefulWidget {
+  const AfterFilterScreen({super.key});
 
   @override
-  _MostPopularScreenState createState() => _MostPopularScreenState();
+  _AfterFilterScreenState createState() => _AfterFilterScreenState();
 }
 
-class _MostPopularScreenState extends State<MostPopularScreen> {
+class _AfterFilterScreenState extends State<AfterFilterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Most Popular',
+          'Dresses',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: AppColors.accent,
@@ -42,8 +43,7 @@ class _MostPopularScreenState extends State<MostPopularScreen> {
             const SizedBox(height: 16),
             
             _buildPopularCard(),
-            const SizedBox(height: 32),
-            _buildShowFiltersButton(), // Add the Show Filters button here
+            const SizedBox(height: 32), // Add the Show Filters button here
           ],
         ),
       ),
@@ -51,30 +51,17 @@ class _MostPopularScreenState extends State<MostPopularScreen> {
   }
 
   // Method to build the Show Filters button
-  Widget _buildShowFiltersButton() {
-    return Center(
-      child: ElevatedButton(
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(100)),
-            ),
-            builder: (context) => const FilterModal(), // Opens the FilterModal
-          );
-        },
-        child: const Text('Show Filters'),
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-          backgroundColor: AppColors.primary, // Customize the color if needed
-        ),
-      ),
-    );
-  }
+  
 
   Widget _buildPopularCard() {
-    return Card(
+     return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => DesignerDetails()),
+        );
+      },
+    child: Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 5,
       child: Padding(
@@ -98,6 +85,7 @@ class _MostPopularScreenState extends State<MostPopularScreen> {
           ],
         ),
       ),
+    ),
     );
   }
 

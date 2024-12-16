@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:styler/src/utlis/AppColors.dart';
 import 'package:styler/src/feature/Register/register.dart';
 
-
 class ShopScreen extends StatelessWidget {
   const ShopScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: Stack(
         children: [
           Container(
             width: double.infinity,
-            height: MediaQuery.of(context).size.height * 0.65,
+            height: screenHeight * 0.65,
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/images/image3.png'),
@@ -26,50 +27,45 @@ class ShopScreen extends StatelessWidget {
             child: ClipPath(
               clipper: SemiCircleClipper(),
               child: Container(
-                color: Colors.white,
-                height: MediaQuery.of(context).size.height * 0.5,
+                color: AppColors.background,
+                height: screenHeight * 0.5,
                 width: double.infinity,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 70.0, horizontal: 20.0),
+                  padding: EdgeInsets.symmetric(vertical: 70.0, horizontal: 20.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Column(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              _buildDot(isActive: false, color: Color(0xFFFFE8DE)),
-                              _buildDot(isActive: false, color: Color(0xFFFFE8DE)),
-                              _buildDot(isActive: true, color: Color(0xFF531A02)),
-                            ],
-                          ),
-                          SizedBox(height: 24),
-                          Text(
-                            "Shop, Customize, and Track Your /n Orders Seamlessly ",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: 'Gloock',
-                              fontSize: 20,
-                              fontWeight: FontWeight.w400,
-                              height: 1.2,
-                              color: AppColors.secondary,
-                            ),
-                          ),
-                          SizedBox(height: 48),
-                          Text(
-                            "Whether you're shopping branded clothing or ordering custom /n desings, easily manage everything from your Styler dashboard",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              height: 1.25,
-                              color: Colors.black,
-                            ),
-                          ),
+                          _buildDot(isActive: false, color: AppColors.hintColor),
+                          _buildDot(isActive: false, color: AppColors.hintColor),
+                          _buildDot(isActive: true, color: AppColors.buttonColor),
                         ],
+                      ),
+                      SizedBox(height: 24),
+                      Text(
+                        "Shop, Customize, and Track Your Orders Seamlessly",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Gloock',
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                          height: 1.2,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                      SizedBox(height: 48),
+                      Text(
+                        "Whether you're shopping branded clothing or ordering custom designs, easily manage everything from your Styler dashboard",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          height: 1.25,
+                          color: AppColors.textColor,
+                        ),
                       ),
                       Spacer(),
                       Stack(
@@ -79,7 +75,7 @@ class ShopScreen extends StatelessWidget {
                             width: 72.73,
                             height: 72.73,
                             decoration: BoxDecoration(
-                              color: AppColors.secondary,
+                              color: AppColors.buttonColor,
                               shape: BoxShape.circle,
                             ),
                           ),
@@ -87,7 +83,7 @@ class ShopScreen extends StatelessWidget {
                             style: ElevatedButton.styleFrom(
                               shape: CircleBorder(),
                               padding: EdgeInsets.all(20),
-                              backgroundColor: AppColors.secondary, // Background color
+                              backgroundColor: AppColors.buttonColor,
                             ),
                             onPressed: () {
                               Navigator.push(
@@ -118,8 +114,8 @@ class ShopScreen extends StatelessWidget {
   Widget _buildDot({bool isActive = false, required Color color}) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 5),
-      height: isActive ? 15 : 15,
-      width: isActive ? 15 : 15,
+      height: 15,
+      width: 15,
       decoration: BoxDecoration(
         color: color,
         shape: BoxShape.circle,

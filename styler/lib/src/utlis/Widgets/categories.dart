@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:styler/src/utlis/AppColors.dart';
 
 class Categories extends StatelessWidget {
+  const Categories({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start, // Align the title to the left
       children: [
         // "Our Categories" title
-        Padding(
-          padding: const EdgeInsets.only(left: 0.0), // Left padding for alignment
+        const Padding(
+          padding: EdgeInsets.only(left: 0.0), // Left padding for alignment
           child: Text(
             'Our Categories',
             style: TextStyle(
               fontSize: 20, // Increase font size for emphasis
               fontWeight: FontWeight.bold, // Make the text bold
-              color: Colors.black, // Matching color to the theme
+              color: AppColors.textColor, // Matching color to the theme
             ),
           ),
         ),
@@ -22,7 +25,7 @@ class Categories extends StatelessWidget {
 
         // Categories grid
         Wrap(
-          spacing: 18.0, // Adjust spacing as needed
+          spacing: 19.0, // Adjust spacing as needed
           runSpacing: 16.0,
           children: [
             _buildCategoryItem(Icons.face, 'Formals'),
@@ -46,15 +49,15 @@ class Categories extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 25,
-          backgroundColor: Colors.brown[100],
-          child: Icon(icon, color: Colors.brown[600], size: 26),
+          backgroundColor:  AppColors.iconBackground,
+          child: Icon(icon, color: AppColors.primary, size: 26),
         ),
         SizedBox(height: 8),
         Text(
           label,
           style: TextStyle(
-            color: Colors.brown[800],
-            fontWeight: FontWeight.w500,
+            color: AppColors.textColor,
+            fontWeight: FontWeight.bold,
             fontSize: 12,
 
           ),

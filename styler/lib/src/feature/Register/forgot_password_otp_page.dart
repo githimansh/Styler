@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:styler/src/utlis/Widgets/Custom_Buttom.dart';
 import 'package:styler/src/utlis/Widgets/back_button.dart';
 import 'package:styler/src/utlis/AppColors.dart';
 
@@ -7,10 +8,16 @@ class ForgotPasswordOTPPageScreen extends StatefulWidget {
   const ForgotPasswordOTPPageScreen({super.key});
 
   @override
-  _ForgotPasswordOTPPageScreenState createState() => _ForgotPasswordOTPPageScreenState();
+  _ForgotPasswordOTPPageScreenState createState() =>
+      _ForgotPasswordOTPPageScreenState();
 }
 
-class _ForgotPasswordOTPPageScreenState extends State<ForgotPasswordOTPPageScreen> {
+class _ForgotPasswordOTPPageScreenState
+    extends State<ForgotPasswordOTPPageScreen> {
+  final List<TextEditingController> controllers = List.generate(4, (_) => TextEditingController());
+  final List<FocusNode> focusNodes = List.generate(4, (_) => FocusNode());
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +49,10 @@ class _ForgotPasswordOTPPageScreenState extends State<ForgotPasswordOTPPageScree
                 const SizedBox(height: 50),
                 _buildOTPFields(),
                 const SizedBox(height: 50),
-                _buildVerifyButton(context),
+                CustomButton(
+                  buttonText: "Verify",
+                  onPressed: _onVerifyPressed,
+                ),
               ],
             ),
           ),
@@ -67,7 +77,7 @@ class _ForgotPasswordOTPPageScreenState extends State<ForgotPasswordOTPPageScree
           TextSpan(
             text: "+91 111*******99",
             style: TextStyle(
-              color: AppColors.secondary,
+              color: AppColors.primary,
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),
@@ -78,53 +88,76 @@ class _ForgotPasswordOTPPageScreenState extends State<ForgotPasswordOTPPageScree
   }
 
   Widget _buildOTPFields() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: List.generate(4, (index) {
-        return SizedBox(
-          width: 60,
-          height: 60,
-          child: TextFormField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textColor,
-            ),
-            keyboardType: TextInputType.number,
-            maxLength: 1,
-          ),
-        );
-      }),
+    return Form(
+      key: _formKey,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          double fieldWidth = constraints.maxWidth > 600 ? 80 : 60;
+          double fontSize = constraints.maxWidth > 600 ? 28 : 24;
+
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: List.generate(4, (index) {
+              return SizedBox(
+                width: fieldWidth,
+                height: fieldWidth,
+                child: TextFormField(
+                  controller: controllers[index],
+                  focusNode: focusNodes[index],
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: fontSize,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textColor,
+                  ),
+                  keyboardType: TextInputType.number,
+                  maxLength: 1,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a digit';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    if (value.isNotEmpty && RegExp(r'^[0-9]$').hasMatch(value)) {
+                      if (index < focusNodes.length - 1) {
+                        FocusScope.of(context).requestFocus(focusNodes[index + 1]);
+                      } else {
+                        focusNodes[index].unfocus();
+                      }
+                    } else if (value.isEmpty) {
+                      controllers[index].clear();
+                    } else {
+                      controllers[index].clear();
+                    }
+                  },
+                ),
+              );
+            }),
+          );
+        },
+      ),
     );
   }
 
-  Widget _buildVerifyButton(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 50,
-      child: ElevatedButton(
-        onPressed: () => context.go('/otp-popup'),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.secondary,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
-          ),
-        ),
-        child: const Text(
-          "Verify",
-          style: TextStyle(
-            fontSize: 18,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
+  void _onVerifyPressed() {
+    if (_formKey.currentState?.validate() ?? false) {
+      // Check if all OTP fields are filled
+      String otp = controllers.map((controller) => controller.text).join();
+      if (otp.length == 4) {
+        // OTP is valid, navigate to the next screen
+        context.go('/otp-popup');
+      } else {
+        // Handle case where OTP is incomplete (although this shouldn't happen with validation)
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please enter all digits of the OTP.')),
+        );
+      }
+    }
   }
 }

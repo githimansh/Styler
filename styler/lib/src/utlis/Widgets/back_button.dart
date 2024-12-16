@@ -6,8 +6,8 @@ class CustomBackButton extends StatelessWidget {
 
   const CustomBackButton({
     super.key,
-    this.backgroundColor = const Color(0xFFFFF2ED),
-    this.iconColor = const Color(0xFF531A02),
+    this.backgroundColor = const Color(0xFFFFF2),
+    this.iconColor = const Color(0xFF025195),
   });
 
   @override

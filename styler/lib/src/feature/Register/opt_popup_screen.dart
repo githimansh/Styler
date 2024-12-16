@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:styler/src/feature/Home/home.dart';
+import 'package:styler/src/utlis/AppColors.dart';
 
 class OTPPopupScreen extends StatefulWidget {
   const OTPPopupScreen({super.key});
@@ -8,6 +9,7 @@ class OTPPopupScreen extends StatefulWidget {
   @override
   _OTPPopupScreenState createState() => _OTPPopupScreenState();
 }
+
 class _OTPPopupScreenState extends State<OTPPopupScreen> {
   @override
   void initState() {
@@ -26,26 +28,26 @@ class _OTPPopupScreenState extends State<OTPPopupScreen> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
-      backgroundColor: Colors.white,
-      child: const Padding(
-        padding: EdgeInsets.all(16.0),
+      backgroundColor: AppColors.appBarBackground,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.person, size: 60, color: Colors.black),
-            SizedBox(height: 20),
+            Icon(Icons.person, size: 60, color: AppColors.textColor),
+            const SizedBox(height: 20),
             Text(
               "Congratulations!",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(
               "Your account is ready to use. You will be redirected to the Home page in a few seconds.",
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18),
             ),
-            SizedBox(height: 20),
-            CircularProgressIndicator(),
+            const SizedBox(height: 20),
+            const CircularProgressIndicator(),
           ],
         ),
       ),

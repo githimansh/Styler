@@ -11,8 +11,8 @@ class AppointmentReminderCard extends ConsumerWidget {
     final appointment = ref.watch(appointmentProvider);
 
     return SizedBox(
-      width: 372,
-      height: 95,
+      width: 400,
+      height: 100,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -42,8 +42,8 @@ class AppointmentReminderCard extends ConsumerWidget {
           style: const TextStyle(
             fontFamily: 'Inter',
             fontWeight: FontWeight.w400,
-            fontSize: 12,
-            color: AppColors.appbariconColor,
+            fontSize: 14,
+            color: AppColors.primary,
           ),
         ),
       ],
@@ -56,7 +56,7 @@ class AppointmentReminderCard extends ConsumerWidget {
       height: 60,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: AppColors.secondary,
+        color: AppColors.primary,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(

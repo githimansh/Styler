@@ -4,7 +4,6 @@ import 'package:styler/src/utlis/Widgets/back_button.dart';
 import 'package:styler/src/utlis/AppColors.dart';
 import 'package:styler/src/feature/Register/forgot_password_otp_page.dart';
 
-
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
 
@@ -113,7 +112,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         decoration: BoxDecoration(
           color: isSelected ? const Color(0xFFFFF2ED) : AppColors.background,
           border: Border.all(
-            color: isSelected ? AppColors.buttonColor : Colors.grey[300]!,
+            color: isSelected ? AppColors.primary : Colors.grey[300]!,
           ),
           borderRadius: BorderRadius.circular(12),
         ),

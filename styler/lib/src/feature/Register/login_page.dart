@@ -18,8 +18,10 @@ class LoginPageScreen extends StatefulWidget {
 class _LoginPageScreenState extends State<LoginPageScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   bool rememberMe = false;
   bool _isPasswordVisible = false;
+  bool isFormValid = false;
 
   @override
   void dispose() {
@@ -28,77 +30,103 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
     super.dispose();
   }
 
+  void _validateForm() {
+    setState(() {
+      isFormValid = _formKey.currentState?.validate() ?? false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background, 
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: SingleChildScrollView(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const CustomBackButton(),
                 const SizedBox(height: 30),
                 _buildLogoAndTitle(),
-               const SizedBox(height: 30),
-                
-              
-                CustomTextField(
-                  controller: emailController,
-                  hintText: 'Email',
-                  prefixIcon: Icons.email,
-                ),
-                const SizedBox(height: 16),
-                
-                
-                CustomTextField(
-                  controller: passwordController,
-                  hintText: 'Password',
-                  prefixIcon: Icons.lock,
-                  obscureText: !_isPasswordVisible, 
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                      size: 24,
-                      color: AppColors.iconColor, 
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _isPasswordVisible = !_isPasswordVisible;
-                      });
-                    },
+                const SizedBox(height: 30),
+                Form(
+                  key: _formKey,
+                  onChanged: _validateForm,
+                  child: Column(
+                    children: [
+                      CustomTextField(
+                        controller: emailController,
+                        hintText: 'Email',
+                        prefixIcon: Icons.email,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Email is required';
+                          }
+                          final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+                          if (!emailRegex.hasMatch(value)) {
+                            return 'Enter a valid email address';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      CustomTextField(
+                        controller: passwordController,
+                        hintText: 'Password',
+                        prefixIcon: Icons.lock,
+                        obscureText: !_isPasswordVisible,
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            size: 24,
+                            color: AppColors.iconColor,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Password is required';
+                          }
+                          if (value.length < 6) {
+                            return 'Password must be at least 6 characters long';
+                          }
+                          return null;
+                        },
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 _buildRememberMeCheckbox(),
-                SizedBox(height: 20),
-                
+                const SizedBox(height: 20),
                 CustomButton(
                   buttonText: 'Sign in',
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => FillProfileScreen()),
-                    );
-                  },
+                  onPressed: isFormValid
+                      ? () {
+                          if (_formKey.currentState!.validate()) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => FillProfileScreen()),
+                            );
+                          }
+                        }
+                      : null,
                 ),
-                SizedBox(height: 20),
-                
+                const SizedBox(height: 20),
                 _buildForgetText(),
-                SizedBox(height: 20),
-                
-          
+                const SizedBox(height: 20),
                 _buildSocialLoginText(),
-                SizedBox(height: 20),
-                
-              
+                const SizedBox(height: 20),
                 _buildSocialLoginButtons(),
-                SizedBox(height: 20),
-                
-              
+                const SizedBox(height: 20),
                 _buildSignUpPrompt(context),
               ],
             ),
@@ -107,7 +135,6 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
       ),
     );
   }
-
 
   Widget _buildLogoAndTitle() {
     return Container(
@@ -118,13 +145,12 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-    
               Container(
                 width: 120,
                 height: 120,
                 decoration: BoxDecoration(
-                  color: AppColors.primary, 
-                  borderRadius: BorderRadius.circular(60), 
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(60),
                 ),
                 alignment: Alignment.center,
                 child: Text(
@@ -135,8 +161,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                   ),
                 ),
               ),
-              SizedBox(width: 4),
-              
+              const SizedBox(width: 4),
               Text(
                 "Styler.",
                 style: GoogleFonts.gloock(
@@ -146,13 +171,12 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
               ),
             ],
           ),
-          SizedBox(height: 10),
-          // Page Title
+          const SizedBox(height: 10),
           Text(
             "Login to Your Account",
             style: GoogleFonts.gloock(
               fontSize: 32,
-              color: AppColors.buttonColor, 
+              color: AppColors.primary,
             ),
           ),
         ],
@@ -171,11 +195,12 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
               rememberMe = value!;
             });
           },
-          activeColor: AppColors.secondary, 
+          activeColor: AppColors.secondary,
         ),
         Text(
           "Remember me",
-          style: TextStyle(color: AppColors.textColor, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: AppColors.textColor, fontWeight: FontWeight.bold),
         ),
       ],
     );
@@ -192,21 +217,21 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
       child: const Text(
         "Forgot the password?",
         style: TextStyle(
-          color: AppColors.buttonColor, 
+          color: AppColors.primary,
           fontWeight: FontWeight.bold,
           fontSize: 16,
         ),
       ),
     );
   }
+
   Widget _buildSocialLoginText() {
     return const Text(
       "or continue with",
       style: TextStyle(
-        fontSize: 14, 
-        color: AppColors.textColor, 
-        fontWeight: FontWeight.bold
-      ),
+          fontSize: 14,
+          color: AppColors.textColor,
+          fontWeight: FontWeight.bold),
     );
   }
 
@@ -215,9 +240,9 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _socialButton('assets/images/image5.png'),
-        SizedBox(width: 20),
+        const SizedBox(width: 20),
         _socialButton('assets/images/image6.png'),
-        SizedBox(width: 20),
+        const SizedBox(width: 20),
         _socialButton('assets/images/image7.png'),
       ],
     );
@@ -226,8 +251,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
   Widget _socialButton(String assetPath) {
     return IconButton(
       icon: Image.asset(assetPath, width: 40, height: 40),
-      onPressed: () {
-      },
+      onPressed: () {},
     );
   }
 
@@ -235,21 +259,19 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-          context, 
+          context,
           MaterialPageRoute(builder: (context) => SignUpScreen()),
         );
       },
       child: Text.rich(
         TextSpan(
           text: "Don't have an account? ",
-          style: TextStyle(color: AppColors.hintColor), 
+          style: TextStyle(color: AppColors.hintColor),
           children: [
             const TextSpan(
               text: "Sign up",
               style: TextStyle(
-                color: AppColors.buttonColor, 
-                fontWeight: FontWeight.bold
-              ),
+                  color: AppColors.primary, fontWeight: FontWeight.bold),
             ),
           ],
         ),

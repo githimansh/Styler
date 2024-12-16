@@ -3,32 +3,34 @@ import 'package:styler/src/utlis/AppColors.dart';
 
 class CustomButton extends StatelessWidget {
   final String buttonText;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   const CustomButton({
     super.key,
     required this.buttonText,
-    required this.onPressed,
+    this.onPressed,
   });
 
   @override
   Widget build(BuildContext context) {
+    double buttonWidth = MediaQuery.of(context).size.width * 0.8;
+
     return SizedBox(
-      width: double.infinity,
+      width: buttonWidth,
       height: 50,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.buttonColor,  
+          backgroundColor: AppColors.buttonColor ,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),  
+            borderRadius: BorderRadius.circular(25),
           ),
         ),
         onPressed: onPressed,
         child: Text(
-          buttonText,  
-          style: TextStyle(
+          buttonText,
+          style: const TextStyle(
             fontSize: 18,
-            color: Colors.white,
+            color:AppColors.background,
             fontWeight: FontWeight.bold,
           ),
         ),

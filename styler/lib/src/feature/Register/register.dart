@@ -4,27 +4,27 @@ import 'package:styler/src/utlis/AppColors.dart';
 import 'package:styler/src/feature/Register/register_page.dart';
 
 class OnboardingScreen extends StatelessWidget {
-  const OnboardingScreen({super.key}); 
+  const OnboardingScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          _buildBackgroundImage(),
+          _buildBackgroundImage(context),  
           Positioned(
-            top: 370,
+            top: MediaQuery.of(context).size.height * 0.42,
             left: MediaQuery.of(context).size.width / 2 - 185,
             child: SingleChildScrollView(
               child: Container(
-                width: 370,
-                height: 402,
+                width: MediaQuery.of(context).size.width * 0.9,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     _buildHeaderText(),
                     const SizedBox(height: 12),
                     _buildSocialButton(
-                      text: 'continue with google',
+                      text: 'Continue with Google',
                       imagePath: 'assets/images/image5.png',
                       backgroundColor: AppColors.background,
                       borderColor: AppColors.hintColor,
@@ -32,7 +32,7 @@ class OnboardingScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
                     _buildSocialButton(
-                      text: 'continue with facebook',
+                      text: 'Continue with Facebook',
                       imagePath: 'assets/images/image6.png',
                       backgroundColor: AppColors.background,
                       borderColor: AppColors.hintColor,
@@ -56,13 +56,13 @@ class OnboardingScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBackgroundImage() {
+  Widget _buildBackgroundImage(BuildContext context) {  
     return Positioned(
       top: 0,
       left: 0,
       right: 0,
       child: Container(
-        height: 350,
+        height: MediaQuery.of(context).size.height * 0.4,
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/image4.png'),
@@ -80,7 +80,7 @@ class OnboardingScreen extends StatelessWidget {
         fontSize: 28,
         fontFamily: 'Gloock',
         fontWeight: FontWeight.bold,
-        color: AppColors.secondary,
+        color: AppColors.primary,
       ),
     );
   }
@@ -93,7 +93,7 @@ class OnboardingScreen extends StatelessWidget {
     required Color textColor,
   }) {
     return Container(
-      width: 370,
+      width: double.infinity,
       height: 58,
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
@@ -104,8 +104,8 @@ class OnboardingScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(imagePath, height: 34, width: 34),
-          const SizedBox(width: 16),
+          Image.asset(imagePath, height: 60, width: 60),
+          const SizedBox(width: 00),
           Text(
             text,
             style: TextStyle(
@@ -122,7 +122,7 @@ class OnboardingScreen extends StatelessWidget {
 
   Widget _buildInstagramButton() {
     return Container(
-      width: 370,
+      width: double.infinity,
       height: 58,
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
@@ -132,10 +132,10 @@ class OnboardingScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset('assets/images/image7.png', height: 34, width: 34),
-          const SizedBox(width: 16),
+          Image.asset('assets/images/image7.png', height: 50, width: 50),
+          const SizedBox(width: 0),
           Text(
-            'continue with instagram',
+            'Continue as a Partner',
             style: const TextStyle(
               fontFamily: 'Inter',
               fontWeight: FontWeight.w600,
@@ -155,8 +155,9 @@ class OnboardingScreen extends StatelessWidget {
         Text(
           'or',
           style: TextStyle(
-            color: AppColors.secondary,
+            color: AppColors.textColor,
             fontWeight: FontWeight.bold,
+            fontSize: 16,
           ),
         ),
       ],
@@ -169,7 +170,7 @@ class OnboardingScreen extends StatelessWidget {
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) =>  SignUpScreen()),
+          MaterialPageRoute(builder: (context) => const SignUpScreen()),
         );
       },
     );
@@ -188,7 +189,7 @@ class OnboardingScreen extends StatelessWidget {
           child: const Text(
             'Sign up',
             style: TextStyle(
-              color: AppColors.secondary,
+              color: AppColors.primary,
               fontWeight: FontWeight.bold,
             ),
           ),
